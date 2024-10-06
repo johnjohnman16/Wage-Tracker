@@ -1,0 +1,36 @@
+const fill = document.getElementById('fill');
+const wageInput = document.getElementById('wage');
+const ticksContainer = document.getElementById('ticks');
+
+let wagePerSecond = 0;
+let earned = 0;
+
+// Update the wage and start tracking
+wageInput.addEventListener('input', () => {
+    const wage = parseFloat(wageInput.value);
+    if (!isNaN(wage)) {
+        wagePerSecond = wage / 3600;
+        earned = 0;
+        updateTicks();
+        updateMeter();
+    }
+});
+
+// Update ticks based on the wage
+function updateTicks() {
+    const totalTicks = 400; // 400px height of the meter
+    ticksContainer.innerHTML = ''; // Clear existing ticks
+    for (let i = 0; i <= totalTicks; i += 4) { // Adjust spacing for ticks
+        const tick = document.createElement('div');
+        tick.classList.add('tick');
+        tick.style.top = `${i}px`;
+        ticksContainer.appendChild(tick);
+    }
+}
+
+// Update the meter every second
+function updateMeter() {
+    setInterval(() => {
+        earned += wagePerSecond;
+        const percentage = (earned / wageInput.value) * 100;
+        fill.style.height = `${percentage}%`;
